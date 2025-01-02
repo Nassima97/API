@@ -1,0 +1,46 @@
+[
+{
+  "firstname": "amal",
+  "lastname": "khemiri",
+  "age": 30,
+    "phonenumber": [
+     "5595951000",
+	  "26526954",
+	  "26261616161"
+    ]
+},
+{
+  "firstname": "ahlem",
+  "lastname": "lachtar",
+  "age": 55,
+    "phonenumber": [
+      "5595951000",
+	  "26526954",
+	  "26261616161"
+    ]
+},
+{
+  "firstname": "nouri",
+  "lastname": "lachtar",
+  "age": 60,
+    "phonenumber": [
+      "5595951000",
+	  "26526954"
+    ]
+},
+{
+  "firstname": "nidhal",
+  "lastname": "lachtar",
+  "age": 60,
+    "phonenumber": [
+      "5595951000",
+	  "26526954",
+	  "26261616161"
+    ]
+}
+]
+
+,
+    "firstname" : "{{$randomFirstName}}",
+    "age" : {{$randomPhoneNumber}},
+    "phonenumber": {{$randomPhoneNumber}}
