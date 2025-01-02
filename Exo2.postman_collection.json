@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "4e41c6fe-327d-44e9-990e-fd47530c4fdd",
+		"name": "Exo2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17559972",
+		"_collection_link": "https://formationteam.postman.co/workspace/WorkspaceFormation~8063b4da-25dd-45de-8254-f9299d88c403/collection/17559972-4e41c6fe-327d-44e9-990e-fd47530c4fdd?action=share&source=collection_link&creator=17559972"
+	},
+	"item": [
+		{
+			"name": "AddNewClients",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"l_name\", pm.iterationData.get(\"lastname\"));\r",
+							"pm.collectionVariables.set(\"f_name\", pm.iterationData.get(\"firstname\"));\r",
+							"pm.collectionVariables.set(\"DataAddress\", JSON.stringify(pm.iterationData.get(\"address\")));\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lastname\" : \"{{l_name}}\",\r\n    \"firstname\" : \"{{f_name}}\",\r\n    \"address\" : {{DataAddress}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://67697320cbf3d7cefd3add70.mockapi.io/api/v1/clients",
+					"protocol": "https",
+					"host": [
+						"67697320cbf3d7cefd3add70",
+						"mockapi",
+						"io"
+					],
+					"path": [
+						"api",
+						"v1",
+						"clients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllClients",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(pm.response.to.have.status(200)){\r",
+							"    console.log(pm.response.json().length);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://67697320cbf3d7cefd3add70.mockapi.io/api/v1/clients",
+					"protocol": "https",
+					"host": [
+						"67697320cbf3d7cefd3add70",
+						"mockapi",
+						"io"
+					],
+					"path": [
+						"api",
+						"v1",
+						"clients"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "l_name",
+			"value": ""
+		},
+		{
+			"key": "f_name",
+			"value": ""
+		},
+		{
+			"key": "DataAddress",
+			"value": ""
+		}
+	]
+}
