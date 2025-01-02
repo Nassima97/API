@@ -39,8 +39,3 @@
     ]
 }
 ]
-
-,
-    "firstname" : "{{$randomFirstName}}",
-    "age" : {{$randomPhoneNumber}},
-    "phonenumber": {{$randomPhoneNumber}}
