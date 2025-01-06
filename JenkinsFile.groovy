@@ -1,41 +1,74 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'NodeJS'
+    }
+
     environment {
-        PATH = "${env.PATH};C:\\Users\\Lenovo\\AppData\\Roaming\\npm"
+        REPO_URL = 'https://github.com/Nassima97/API.git'
+        COLLECTION_PATH = 'Exo2.postman_collection.json' 
+        DATAVAR_PATH = 'create_json.json'
+        REPORT_DIR = 'newman-reports'
     }
 
     stages {
-        stage('Cloner le projet depuis GitHub') {
+        stage('Checkout Code') {
             steps {
-                echo 'Clonage du projet depuis GitHub...'
-                git branch: 'main',
-                    credentialsId: 'github-credentials',
-                    url: 'https://github.com/Nassima97/API.git'
+                echo 'Cloning the repository...'
+                git branch: 'main', url: "${REPO_URL}"
             }
         }
 
-        stage('Installer Newman') {
+        stage('Install Dependencies') {
             steps {
-                echo 'Installation de Newman...'
+                echo 'Installing Newman and reporters...'
                 bat 'npm install -g newman'
+                bat 'npm install -g newman-reporter-htmlextra'
             }
         }
 
-        stage('Exécuter la collection Postman') {
+        stage('Run Newman Collection') {
             steps {
-                echo 'Exécution de la collection Postman...'
-                bat 'newman run Exo2.postman_collection.json -d create_json.json --disable-unicode --reporter-cli-no-banner'
+                script {
+                    def newmanCommand = "newman run ${COLLECTION_PATH} --reporters=cli,htmlextra --reporter-htmlextra-export ${REPORT_DIR}/newman-report.html"
+                    
+                    if (fileExists(DATAVAR_PATH)) {
+                        echo "Data file found. Including: ${DATAVAR_PATH}"
+                        newmanCommand += " -d ${DATAVAR_PATH}"
+                    } else {
+                        echo "Data file not found. Skipping."
+                    }
+                    
+                    echo "Executing Newman command..."
+                    bat newmanCommand
+                }
+            }
+        }
+
+        stage('Publish Newman Report') {
+            steps {
+                publishHTML(target: [
+                    reportName : 'Newman Test Report',
+                    reportDir  : "${REPORT_DIR}",
+                    reportFiles: 'newman-report.html',
+                    keepAll    : true,
+                    alwaysLinkToLastBuild: true,
+                    allowMissing: false
+                ])
             }
         }
     }
 
     post {
+        always {
+            echo 'Pipeline terminé. Consultez la console pour les détails.'
+        }
         success {
-            echo 'Pipeline exécuté avec succès.'
+            echo 'Tests exécutés avec succès. Rapport généré.'
         }
         failure {
-            echo 'Le pipeline a échoué.'
+            echo 'Échec dans lexécution de la pipeline ou des tests Newman. Vérifiez les logs.'
         }
     }
 }
